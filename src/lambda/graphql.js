@@ -1,0 +1,23 @@
+import { ApolloServer, gql } from "apollo-server-lambda";
+
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+// Provide resolver functions for your schema fields
+const resolvers = {
+  Query: {
+    hello: () => "Hello world!"
+  }
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
+
+exports.handler = server.createHandler({
+  cors: {
+    origin: "*",
+    credentials: true
+  }
+});
