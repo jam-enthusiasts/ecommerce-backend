@@ -3,6 +3,8 @@ import "reflect-metadata";
 // import models from "../models";
 import resolvers from "../resolvers";
 import schemas from "../schema";
+import * as mongoose from "mongoose";
+import { MONGODB_URI } from "../utils/constants";
 // const typeDefs = gql`
 //   type Query {
 //     hello: String
@@ -22,6 +24,15 @@ import schemas from "../schema";
 // }
 
 const server = new ApolloServer({ typeDefs: schemas, resolvers });
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("mongodb connected");
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
 exports.handler = server.createHandler({
   cors: {
