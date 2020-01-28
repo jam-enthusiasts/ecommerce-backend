@@ -28,6 +28,6 @@ const UserSchema: Schema = new Schema({
 // UserSchema.pre('findOneAndUpdate', function () {
 // 	this.update({}, { $set: { updated_at: new Date() } });
 // });
-
-export const User: Model<IUser> = model<IUser>('User', UserSchema);
+const User: Model<IUser> = model<IUser>('User', UserSchema);
+export default User;
 // module.exports =

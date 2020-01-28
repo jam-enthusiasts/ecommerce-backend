@@ -1,5 +1,6 @@
 // import bcrypt from "bcryptjs";
 import { genSaltSync, hashSync, compareSync } from 'bcryptjs';
+import { createToken } from "../connectors/jwt";
 import { IResolvers } from 'graphql-tools';
 import { combineResolvers } from "graphql-resolvers";
 import { AuthenticationError, UserInputError } from "apollo-server-lambda";
@@ -44,7 +45,7 @@ const userResolvers: IResolvers = {
 			}
 		},
 
-		signIn: async (_: any, args, { models }) => {
+		signIn: async (_: any, args, { models, secret }) => {
 
 			const { email } = args;
 			const user = await models.User.findOne({ email }).then(async (user: any) => {
@@ -60,7 +61,14 @@ const userResolvers: IResolvers = {
 
 				return user;
 			});
-			return user;
+
+			const token = await createToken(user, secret, '7d');
+			console.log(token);
+			return {
+				// name: user.name,
+				email: user.email,
+				token
+			}
 		}
 	}
 }

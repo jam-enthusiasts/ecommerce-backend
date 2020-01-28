@@ -1,4 +1,5 @@
 import { gql } from "apollo-server-lambda";
+
 import userSchema from "./user";
 
 const linkSchema = gql`
@@ -14,6 +15,6 @@ const linkSchema = gql`
 
 //schema stitch
 export default [
-	linkSchema,
-	userSchema
+  linkSchema,
+  userSchema
 ]
