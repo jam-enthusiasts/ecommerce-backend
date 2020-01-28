@@ -4,6 +4,7 @@ import { createToken } from "../connectors/jwt";
 import { IResolvers } from 'graphql-tools';
 import { combineResolvers } from "graphql-resolvers";
 import { AuthenticationError, UserInputError } from "apollo-server-lambda";
+import { isAuthenticated } from './authorization';
 
 const userResolvers: IResolvers = {
 	Query: {
@@ -18,6 +19,7 @@ const userResolvers: IResolvers = {
 			}
 		),
 		user: combineResolvers(
+			isAuthenticated,
 			async (_: any, { email }: any, { models }: any): Promise<string> => {
 				// auth check for every query and mutation except for the signup mutation
 				return models.User.findOne({ email });
