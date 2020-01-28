@@ -1,13 +1,32 @@
-!function(e,r){for(var t in r)e[t]=r[t]}(exports,function(e){var r={};function t(n){if(r[n])return r[n].exports;var o=r[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,t),o.l=!0,o.exports}return t.m=e,t.c=r,t.d=function(e,r,n){t.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:n})},t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t.t=function(e,r){if(1&r&&(e=t(e)),8&r)return e;if(4&r&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(t.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&r&&"string"!=typeof e)for(var o in e)t.d(n,o,function(r){return e[r]}.bind(null,o));return n},t.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(r,"a",r),r},t.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},t.p="",t(t.s=3)}([function(e,r){e.exports=require("apollo-server-lambda")},function(e,r){e.exports=require("graphql-iso-date")},function(e,r){e.exports=require("reflect-metadata")},function(e,r,t){"use strict";t.r(r);var n=t(0);t(2);var o=[{Date:t(1).GraphQLDateTime},{Query:{hello:()=>"Hello dere"}}],u=n.gql`
+!function(e,r){for(var n in r)e[n]=r[n]}(exports,function(e){var r={};function n(t){if(r[t])return r[t].exports;var o=r[t]={i:t,l:!1,exports:{}};return e[t].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=e,n.c=r,n.d=function(e,r,t){n.o(e,r)||Object.defineProperty(e,r,{enumerable:!0,get:t})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,r){if(1&r&&(e=n(e)),8&r)return e;if(4&r&&"object"==typeof e&&e&&e.__esModule)return e;var t=Object.create(null);if(n.r(t),Object.defineProperty(t,"default",{enumerable:!0,value:e}),2&r&&"string"!=typeof e)for(var o in e)n.d(t,o,function(r){return e[r]}.bind(null,o));return t},n.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(r,"a",r),r},n.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},n.p="",n(n.s=6)}([function(e,r){e.exports=require("apollo-server-lambda")},function(e,r){e.exports=require("mongoose")},function(e,r){e.exports=require("bcryptjs")},function(e,r){e.exports=require("graphql-resolvers")},function(e,r){e.exports=require("graphql-iso-date")},function(e,r){e.exports=require("reflect-metadata")},function(e,r,n){"use strict";n.r(r);var t=n(0),o=(n(5),n(4)),i=n(2),a=n(3);var s={Query:{hello:()=>"Hello dere",users:Object(a.combineResolvers)(async(e,r,{models:n})=>(console.log(r),n.User.find({}))),user:Object(a.combineResolvers)(async(e,{email:r},{models:n})=>n.User.findOne({email:r}))},Mutation:{signUp:async(e,r,{models:n})=>{const{email:o,password:a,name:s}=r,l=Object(i.genSaltSync)(10),c=await Object(i.hashSync)(a,l);if(await n.User.findOne({email:o}).then())throw new t.UserInputError("Sign up failed!");return n.User.create({email:o,password:c,name:s})},signIn:async(e,r,{models:n})=>{const{email:o}=r;return await n.User.findOne({email:o}).then(async e=>{if(!e)throw new t.UserInputError("Login failed!");if(!await Object(i.compareSync)(r.password,e.password))throw new t.AuthenticationError("Invalid login/password!");return e})}}};var l=[{Date:o.GraphQLDateTime},s],c=t.gql`
 	extend type Query {
     hello: String
+		user(email: String!): User
+    users: [User]
+    me: User
 	}
-	
-	type User {
-		name: String!
-		email: String!
-	}
-`;var l=[n.gql`
+
+  extend type Mutation {
+    signUp(
+      email: String!
+      password: String!
+      password2: String!
+      name: String!
+    ): User!
+    signIn(email: String!, password: String!): Token!
+  }
+  type Token {
+    id: String!
+    name: String!
+    email: String!
+    token: String!
+  }
+  type User {
+    name: String!
+    email: String!
+    date: String
+  }
+`;var u=[t.gql`
   scalar Date
   
   type Query {
@@ -16,4 +35,4 @@
   type Mutation {
     _: Boolean
   }
-`,u];const a=new n.ApolloServer({typeDefs:l,resolvers:o});exports.handler=a.createHandler({cors:{origin:"*",credentials:!0}})}]));
+`,c],d=n(1);const p=new d.Schema({name:{type:String,required:!0},email:{type:String,required:!0},password:{type:String,required:!0}});var m={User:Object(d.model)("User",p)};const f=new t.ApolloServer({typeDefs:u,resolvers:l,context:async()=>({models:m})});d.connect("mongodb://corey:zxc123@ds131932.mlab.com:31932/mycl-ecommerce",{useUnifiedTopology:!0,useNewUrlParser:!0}).then(()=>{console.log("mongodb connected")}).catch(e=>{console.log(e)}),exports.handler=f.createHandler({cors:{origin:"*",credentials:!0}})}]));
