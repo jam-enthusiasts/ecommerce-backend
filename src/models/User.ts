@@ -1,6 +1,7 @@
-// const mongoose = require("mongoose");
-// const Schema = mongoose.Schema;
+import * as mongoose from "mongoose";
 import { Schema, Document, Model, model } from 'mongoose';
+
+delete mongoose.connection.models['User'];
 
 export interface IUser extends Document {
 	name: string;
@@ -28,6 +29,5 @@ const UserSchema: Schema = new Schema({
 // UserSchema.pre('findOneAndUpdate', function () {
 // 	this.update({}, { $set: { updated_at: new Date() } });
 // });
-const User: Model<IUser> = model<IUser>('User', UserSchema);
-export default User;
+export const User: Model<IUser> = model<IUser>('User', UserSchema);
 // module.exports =

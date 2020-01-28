@@ -1,6 +1,5 @@
 import { ApolloServer, AuthenticationError } from "apollo-server-lambda";
 import "reflect-metadata";
-// import models from "../models";
 import resolvers from "../resolvers";
 import schemas from "../schema";
 import * as mongoose from "mongoose";
