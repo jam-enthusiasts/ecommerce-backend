@@ -30,7 +30,7 @@
     "netlify-lambda": "^1.6.3",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^0.17.6",
-    "validator": "^11.1.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
